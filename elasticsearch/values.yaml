@@ -110,16 +110,16 @@ volumeClaimTemplate:
       storage: 30Gi
 
 rbac:
-  create: false
+  create: true
   serviceAccountAnnotations: {}
   serviceAccountName: ""
   automountToken: true
 
 podSecurityPolicy:
-  create: false
+  create: true
   name: ""
   spec:
-    privileged: true
+    privileged: false
     fsGroup:
       rule: RunAsAny
     runAsUser:
