@@ -109,30 +109,8 @@ volumeClaimTemplate:
     requests:
       storage: 30Gi
 
-rbac:
+serviceAccount:
   create: true
-  serviceAccountAnnotations: {}
-  serviceAccountName: ""
-  automountToken: true
-
-podSecurityPolicy:
-  create: true
-  name: ""
-  spec:
-    privileged: false
-    fsGroup:
-      rule: RunAsAny
-    runAsUser:
-      rule: RunAsAny
-    seLinux:
-      rule: RunAsAny
-    supplementalGroups:
-      rule: RunAsAny
-    volumes:
-      - secret
-      - configMap
-      - persistentVolumeClaim
-      - emptyDir
 
 persistence:
   enabled: true
@@ -209,17 +187,6 @@ updateStrategy: RollingUpdate
 # of your pods to be unavailable during maintenance
 maxUnavailable: 1
 
-podSecurityContext:
-  fsGroup: 1000
-  runAsUser: 1000
-
-securityContext:
-  capabilities:
-    drop:
-      - ALL
-  # readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: 1000
 
 # How long to wait for elasticsearch to stop gracefully
 terminationGracePeriod: 120

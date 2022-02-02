@@ -19,6 +19,9 @@ spec:
     matchLabels:
       app: "{{ template "elasticsearch.uname" . }}"
   replicas: {{ .Values.replicas }}
+  securityContext:
+    fsGroup: 2000
+    runAsUser: 1001
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   updateStrategy:
     type: {{ .Values.updateStrategy }}
@@ -65,15 +68,9 @@ spec:
       schedulerName: "{{ .Values.schedulerName }}"
       {{- end }}
       securityContext:
-{{ toYaml .Values.podSecurityContext | indent 8 }}
-        {{- if .Values.fsGroup }}
-        fsGroup: {{ .Values.fsGroup }} # Deprecated value, please use .Values.podSecurityContext.fsGroup
-        {{- end }}
-      {{- if .Values.rbac.create }}
-      serviceAccountName: "{{ template "elasticsearch.uname" . }}"
-      {{- else if not (eq .Values.rbac.serviceAccountName "") }}
-      serviceAccountName: {{ .Values.rbac.serviceAccountName | quote }}
-      {{- end }}
+        readOnlyRootFilesystem: true
+        allowPrivilegeEscalation: false
+      serviceAccountName: {{ include "charts.fullname" . }}
       automountServiceAccountToken: {{ .Values.rbac.automountToken }}
       {{- with .Values.tolerations }}
       tolerations:
